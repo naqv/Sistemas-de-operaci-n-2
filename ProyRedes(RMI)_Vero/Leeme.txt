@@ -1,0 +1,90 @@
+Archivo Leeme.txt
+
+**Integrantes del Grupo 33:
+   David Lilue 09-10444
+   Verónica Liñayo 08-10615
+
+El programa es la implementación de un sistema cliente-servidor de acceso a archivos remotos el cual está basado en un servidor de archivos centralizado. 
+El sistema maneja un esquema sencillo de validación de usuarios a través de un servidor de autenticación, que se comunica solo con el servidor de archivos y 
+luego el cliente, una vez iniciado, puede acceder a los servicios del sistema de archivo remoto mediante los siguientes comandos:
+
+  -rls --- muestra la lista de archivos disponibles en el servidor centralizado.
+  -lls --- muestra la lista de archivos disponibles localmente(en el cliente).
+  -sub archivo --- sube un archivo al servidor remoto.
+  -baj archivo --- descarga un archivo del servidor remoto.
+  -bor archivo --- elimina un archivo del servidor remoto.
+  -info --- muestra la lista de comandos que el cliente puede utilizar.
+  -sal --- termina la ejecución del programa cliente.
+
+**Archivos que contiene proy2_grupo33.tar.gz :
+
+ - Makefile           : Programa Makefile, es el que permite compilar todos los archivos necesarios para ejecutar el programa.
+ - a_rmifs.java       : programa que corre el servidor de autenticación.
+ - s_rmifs.java       : programa que corre el servidor centralizado, en el cual se encuentran los archivos remotos.
+ - c_rmifs.java       : programa que corre al cliente el cual se conecta al servidor centralizado.
+ - RmiAuthen.java     : interfaz con las funciones de autenticacion.
+ - RmiAuthenImpl.java : programa que implementa la interfaz RmiAuthen.java donde se tiene la implementación necesaria para hacer la verificación.
+ - RmiServer.java     : interfaz con las funciones necesarias para todos los comandos del cliente.
+ - RmiServerImpl.java : programa que implementa la interfaz RmiServer.java donde se implementa lo necesario para manejar los comandos solicitados para el servidor.
+ - RmiClient.java     : programa donde se implementa el manejo de los comandos locales para el cliente.
+ - Box.java           : estructura con dos strings y un objeto del mismo tipo, utilizada por Queue.java para hacer la función de una cola.
+ - Queue.java         : programa que hace la función de una cola, usado para realizar la funcionalidad de algunos comandos.
+ - FileManager.java   : programa que posee las funciones que permiten manejar la lectura de los archivos.
+
+**Carpeta/Librerias:
+
+ - gnu/getopt         : se uso esta carpeta con archivos ya implementados para el reconocimiento de opciones al momento de la ejecucion, no interfiere con ninguna
+			funcionalidad de las aplicacion adicional. 
+			
+			****Es necesario que exista esta carpeta con todos sus archivos!!!!
+
+**Compilacion:
+
+Una vez ubicado en el directorio donde extrajo el .tar.gz en su consola, inserte el comando make el cuál compilará todos los archivos necesarios para 
+la ejecución del programa. Y dependiendo de que aplicacion desee usar ejecuta con los 3 tipos de comandos en el terminal.
+
+**Ejecucion:
+
+Para la ejecución del programa será necesario que usted arranque el funcionamiento de los servidores antes que el cliente.
+Primero el autenticacion, luego el de archivos y por ultimo los clientes.
+
+Para ejecutar las aplicaciones:
+
+Primero debe iniciar el servidor de autenticación de la siguiente forma:
+
+   java a_rmifs -f <archivo_usuarios_permitidos> -p <puerto_local>
+
+Luego se procede a iniciar el servidor centralizado:
+
+   java s_rmifs -l <puerto_local> -h <ip_o_dns_a_rmifs> -r <puerto_remoto>
+
+Finalmente se procede a iniciar al cliente:
+
+   java c_rmifs [-f <archivo_usuario_cliente>] -m <ip_o_dns_s_rmifs> -p <puerto_remoto> [-c <comandos_al_iniciar>] 
+
+Adicionalmente los comandos a_rmifs, c_rmifs tiene una opcion [-h] con ayuda de las opciones. Y s_rmifs tiene [-a]
+
+**Funcionamiento del Programa:
+
+Una vez compilado y ejecutado de forma correcta, durante la ejecucion y uso de la aplicacion existen distintos manejos de excepciones y 
+errores para que la misma no colapse. Una vez que estan en ejecución los dos servidores, al iniciar el cliente, el mismo pide autenticarse
+con el servidor de archivos, que a su vez es cliente del servidor de autenticación y le solicita que verifique los datos de usuario y contraseña, 
+luego de la verificación con respecto al archivo de usuario autorizados. Permite o no el inicio del cliente, el cual puede pasar sus datos por medio 
+de un archivo o ingresarlo mediante la consola. Una vez que el cliente logra iniciar, y los dos servidores estan montados. En todos se mostrara un
+"terminal" interno de la aplicacion que procesa los distintos comandos especificados en el enunciado. A pesar que el servidor de autenticacion no tenia
+ningun comando se dio la posibilidad de salir con el comando "sal" al igual que los demas. El cliente puede realizar todos los comandos para interactuar
+con el servidor centralizado. Y desde el servidor centralizado, se pueden realizar todos sus comandos "log" y "sal". Por otro lado "log" guarda todos
+los comandos que realicen los cliente aunque sean invalidos. Todos los comandos están todos en funcionamiento, tanto los del cliente como los del servidor.
+Tambien el los comandos del cliente, "sub", "baj" y "bor" donde tiene que especificarse un archivo. Solo tomara el proximo string, si existe uno despues
+solo sera ignorado.
+Parte interesante del servidor es que al hacer new del RmiServerImpl, internamente tendra una estructura RmiAuthen con referencia al servidor de autenticacion. 
+
+
+
+
+
+
+
+
+
+
